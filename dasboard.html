@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Health Dashboard Wireframe</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .wireframe-border {
+      border: 2px dashed #10b981;
+    }
+    
+    .header-container {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    }
+    
+    .health-alert {
+      transition: all 0.3s ease;
+    }
+    
+    .health-alert:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+    
+    .card {
+      background: white;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      min-height: 200px;
+      border: 1px solid #d1fae5;
+    }
+    
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+      border-color: #10b981;
+    }
+    
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #064e3b;
+      margin-bottom: 0.75rem;
+    }
+    
+    .card-description {
+      color: #047857;
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+    
+    .chatbot-sticky {
+      /* position: fixed; */
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-width: 200px;
+      z-index: 40;
+    }
+    
+    .chatbot-sticky:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+    }
+    
+    .chatbot-arrow {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .table-container {
+      width: 100%;
+      max-width: 5xl;
+      margin-top: 2rem;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+      overflow: hidden;
+      border: 2px solid #d1fae5;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .table-container h2 {
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      color: white;
+      padding: 1.5rem;
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    .table-container table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .table-container th {
+      background: #f0fdf4;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #064e3b;
+      border-bottom: 2px solid #d1fae5;
+    }
+    
+    .table-container td {
+      padding: 1rem;
+      border-bottom: 1px solid #d1fae5;
+      color: #047857;
+    }
+    
+    .table-container tr:hover {
+      background: #f0fdf4;
+    }
+    
+    .close-table {
+      float: right;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    .close-table:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Responsive close button */
+    @media (max-width: 640px) {
+      .close-table {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .close-table {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    .planner-section {
+      background: white;
+      border: 2px solid #d1fae5;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+      position: relative;
+      z-index: 10;
+    }
+
+    .planner-card {
+      background: #f0fdf4;
+      border: 1px solid #d1fae5;
+    }
+
+    .planner-card:hover {
+      background: #ecfdf5;
+    }
+
+    .season-card {
+      background: #f0fdf4;
+      border: 1px solid #d1fae5;
+    }
+
+    .season-card:hover {
+      background: #ecfdf5;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    }
+
+    /* Fix for main content spacing to prevent overlap */
+    .main-content {
+      padding-bottom: 120px; /* Add space at bottom for chatbot */
+    }
+
+    /* Chat window positioning fix */
+    .chat-window {
+      position: fixed !important;
+      bottom: 100px !important;
+      left: 50% !important;
+      right: auto !important;
+      transform: translateX(-50%) !important;
+      width: 320px;
+      height: 400px;
+      z-index: 50;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-emerald-50 min-h-screen flex flex-col items-center p-6 relative">
+   
+  <!-- Navbar -->
+<!-- <nav class="fixed top-0 left-0 w-full bg-white shadow-lg z-50">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+    
+    
+    <div class="flex items-center space-x-3">
+      <img src="IMG_20250904_223217-removebg-preview.png" alt="Logo" class="h-10 w-10 object-contain"> 
+      <span class="text-2xl font-extrabold text-gray-800 tracking-wide">Swasth<span class="text-green-600">.ai</span></span>
+    </div>
+
+    
+    <div class="flex space-x-8">
+      <a href="#" class="text-gray-700 font-medium hover:text-blue-600 transition duration-300">Home</a>
+      <a href="#" class="text-gray-700 font-medium hover:text-blue-600 transition duration-300">Health Alert</a>
+    </div>
+  </div>
+</nav> -->
+
+<!-- Navbar -->
+<nav class="fixed top-0 left-0 w-full bg-white shadow-lg z-50">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+    
+    <!-- Left: Logo -->
+    <div class="flex items-center space-x-3">
+      <img src="IMG_20250904_223217-removebg-preview.png" alt="Logo" class="h-10 w-10 object-contain"> 
+      <span class="text-2xl font-extrabold text-gray-800 tracking-wide">Swasth<span class="text-green-600">.ai</span></span>
+    </div>
+
+    <!-- Hamburger (visible on small screens) -->
+    <button id="menuBtn" class="md:hidden text-gray-700 text-2xl focus:outline-none">
+      ☰
+    </button>
+
+    <!-- Right: Links -->
+    <div id="navLinks" class="hidden md:flex space-x-8 flex-col md:flex-row absolute md:static top-14 left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none p-4 md:p-0">
+      <a href="#" class="text-gray-700 font-medium hover:text-blue-600 transition duration-300">Home</a>
+      <a href="#" class="text-gray-700 font-medium hover:text-blue-600 transition duration-300">Health Alert</a>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Main Content Container with proper spacing -->
+  <div class="main-content w-full flex flex-col items-center">
+    <!-- Top Section: Personalized Dashboard Header -->
+    <header class="w-full max-w-5xl mb-8 mt-24">
+      <div class="wireframe-border header-container p-8 min-h-[120px] flex flex-col justify-center rounded-2xl">
+        <div class="flex items-center mb-2">
+          <span class="text-2xl mr-3">👋</span>
+          <p class="text-2xl font-bold text-emerald-800">
+            Hello Vishruti
+          </p>
+        </div>
+        <p class="text-emerald-700 text-lg mb-4">
+          Here's your personalized health update
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <div class="health-alert bg-green-100 border-l-4 border-green-500 px-4 py-2 rounded-r-lg">
+            <span class="text-green-700 font-semibold">🏥 Health Alert</span>
+          </div>
+          <div class="health-alert bg-emerald-100 border-l-4 border-emerald-500 px-4 py-2 rounded-r-lg">
+            <span class="text-emerald-700 font-semibold">📢 Advisory Messages</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Cards Section -->
+    <main class="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+      <section class="wireframe-border card card-1 flex flex-col items-center justify-center p-8 rounded-2xl">
+        <div class="card-icon">✈️</div>
+        <h3 class="card-title">Travel Guide</h3>
+        <p class="card-description text-center">
+          Comprehensive travel health tips, vaccination requirements, and destination-specific medical advice for safe journeys worldwide.
+        </p>
+      </section>
+      
+      <section onclick="toggleSection('healthTracker')" class="wireframe-border card card-2 flex flex-col items-center justify-center p-8 rounded-2xl">
+        <div class="card-icon">🏥</div>
+        <h3 class="card-title">Health Tracker</h3>
+        <p class="card-description text-center">
+          Detailed information about common diseases, symptoms recognition, prevention strategies, and treatment guidelines.
+        </p>
+      </section>
+
+      <section onclick="toggleSection('seasonalGuide')" class="wireframe-border card card-3 flex flex-col items-center justify-center p-8 rounded-2xl">
+        <div class="card-icon">🌦️</div>
+        <h3 class="card-title">Seasonal Guide</h3>
+        <p class="card-description text-center">
+          Season-specific health recommendations, weather-related precautions, and wellness tips for optimal year-round health.
+        </p>
+      </section>
+      
+      <section onclick="toggleSection('30days')" class="wireframe-border card card-4 flex flex-col items-center justify-center p-8 rounded-2xl">
+        <div class="card-icon">📅</div>
+        <h3 class="card-title">30 Days Planner</h3>
+        <p class="card-description text-center">
+          Personalized monthly health plans with age-appropriate exercises, nutrition goals, and wellness milestones to track progress.
+        </p>
+      </section>
+    </main>
+
+    <!-- Health Tracker Table positioned below the main content -->
+    <div id="healthTracker" class="table-container w-full max-w-5xl" style="display:none;">
+      <h2>
+        🏥 Health Tracker
+        <button class="close-table" onclick="toggleSection('healthTracker')">✖ Close</button>
+      </h2>
+
+      <div class="p-6">
+        <div class="overflow-x-auto">
+          <table class="min-w-full">
+            <thead>
+              <tr>
+                <th class="min-w-[60px]">ID</th>
+                <th class="min-w-[120px]">Disease</th>
+                <th class="min-w-[200px]">Physical Activity</th>
+                <th class="min-w-[150px]">Medicine</th>
+                <th class="min-w-[200px]">Home Made Solution</th>
+                <th class="min-w-[180px]">Ayurvedic Medicine</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>001</td>
+                <td>High Blood Pressure</td>
+                <td>30 min daily walk, swimming, yoga</td>
+                <td>ACE inhibitors (as prescribed)</td>
+                <td>Garlic water, beetroot juice, meditation</td>
+                <td>Arjuna bark powder, Ashwagandha</td>
+              </tr>
+              <tr>
+                <td>002</td>
+                <td>Diabetes Type 2</td>
+                <td>45 min cardio, resistance training</td>
+                <td>Metformin (as prescribed)</td>
+                <td>Bitter gourd juice, cinnamon tea</td>
+                <td>Gudmar leaves, Jamun seed powder</td>
+              </tr>
+              <tr>
+                <td>003</td>
+                <td>Arthritis</td>
+                <td>Low-impact exercises, stretching, water therapy</td>
+                <td>NSAIDs (as prescribed)</td>
+                <td>Turmeric milk, hot compress, ginger tea</td>
+                <td>Shallaki, Guggul, Rasna</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 30 days planner -->
+    <div id="30days" class="planner-section shadow-lg rounded-2xl p-4 sm:p-6 mt-6 w-full max-w-6xl mx-auto" style="display:none;">
+  <!-- Title + Age Range -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-6 p-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl">
+    <h2 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
+      📅 30-Day Perfect Health Route
+    </h2>
+    <div class="flex items-center gap-3">
+      <select id="ageSelect"
+        class="border-2 border-green-300 rounded-lg p-2 text-emerald-800 bg-white text-sm sm:text-base"
+        onchange="updatePlanner()">
+        <option value="1-30">👶 1-30 Years</option>
+        <option value="30-60">🧑 30-60 Years</option>
+        <option value="60-100">👴 60-100 Years</option>
+      </select>
+      <button class="close-table text-white font-semibold hover:text-red-200" onclick="toggleSection('30days')">
+        ✖ Close
+      </button>
+    </div>
+  </div>
+
+      <!-- Planner Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Movement Section -->
+        <div class="border-2 border-green-200 rounded-xl p-4 bg-green-50">
+          <h3 class="font-semibold text-lg flex items-center gap-2 text-emerald-800 mb-4">🏃 Movement</h3>
+          <div id="movementContent" class="space-y-3"></div>
+        </div>
+
+        <!-- Nutrition Section -->
+        <div class="border-2 border-green-200 rounded-xl p-4 bg-green-50">
+          <h3 class="font-semibold text-lg flex items-center gap-2 text-emerald-800 mb-4">🥗 Nutrition</h3>
+          <div id="nutritionContent" class="space-y-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seasonal Health Guide -->
+    <div id="seasonalGuide" class="table-container w-full max-w-5xl" style="display:none;">
+      <h2>
+        🌦 Seasonal Health Guide
+        <button class="close-table" onclick="toggleSection('seasonalGuide')">✖ Close</button>
+      </h2>
+
+      <div class="p-6">
+        <div class="mb-6 p-4 bg-green-50 rounded-xl border border-green-200">
+          <label for="seasonSelect" class="font-semibold text-emerald-800">Choose Season: </label>
+          <select id="seasonSelect" onchange="updateSeason()" class="border-2 border-green-300 rounded-lg p-2 ml-2 text-emerald-800 bg-white">
+            <option value="rainy">🌧 Rainy Season</option>
+            <option value="summer">☀ Summer</option>
+            <option value="winter">❄ Winter</option>
+          </select>
+        </div>
+
+        <div id="seasonContent" class="space-y-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chatbot Sticky Section -->
+  <div class="chatbot-sticky" id="chatToggle" role="button" tabindex="0" aria-label="Open chatbot">
+    <div class="flex items-center">
+      <span class="text-2xl mr-3">🤖</span>
+      <span>Chat with Swasth.AI</span>
+    </div>
+    <span class="chatbot-arrow">↑</span>
+  </div>
+  
+
+  <div id="chatWindow" class="chat-window bg-white rounded-xl shadow-2xl border-2 border-green-200 flex flex-col overflow-hidden hidden">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-green-500 to-emerald-600 text-white flex justify-between items-center px-4 py-2">
+      <span class="font-bold">Swasth.AI Bot</span>
+      <button id="closeChat" class="text-lg font-bold">✖</button>
+    </div>
+
+    <!-- Messages -->
+    <div id="messages" class="flex-1 p-3 overflow-y-auto text-sm text-emerald-700">
+      <p><b>Bot:</b> Hello Vishruti 👋 How can I help you today?</p>
+    </div>
+
+    <!-- Input -->
+    <div class="flex border-t border-green-200">
+      <input id="userInput" type="text" placeholder="Type a message..." class="flex-1 p-2 outline-none text-sm">
+      <button id="sendBtn" class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4">Send</button>
+    </div>
+  </div>
+
+<script>
+  function toggleSection(sectionId) {
+    const guide = document.getElementById(sectionId);
+    guide.style.display = guide.style.display === "none" ? "block" : "none";
+    
+    // Initialize content when opening sections
+    if (guide.style.display === "block") {
+      if (sectionId === 'seasonalGuide') {
+        updateSeason();
+      } else if (sectionId === '30days') {
+        updatePlanner();
+      }
+      
+      setTimeout(() => {
+        guide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }
+
+  // Add click interactions for cards
+  document.querySelectorAll('.card').forEach((card, index) => {
+    card.addEventListener('click', () => {
+      card.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        card.style.transform = 'translateY(-8px)';
+      }, 150);
+    });
+  });
+
+  // Add scroll-triggered animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+      }
+    });
+  });
+
+  document.querySelectorAll('.card').forEach(card => {
+    observer.observe(card);
+  });
+
+  // Chatbot functionality
+  const chatToggle = document.getElementById("chatToggle");
+  const chatWindow = document.getElementById("chatWindow");
+  const closeChat = document.getElementById("closeChat");
+  const sendBtn = document.getElementById("sendBtn");
+  const userInput = document.getElementById("userInput");
+  const messages = document.getElementById("messages");
+
+  // Toggle chatbot window
+  chatToggle.addEventListener("click", () => {
+    chatWindow.classList.toggle("hidden");
+  });
+
+  closeChat.addEventListener("click", () => {
+    chatWindow.classList.add("hidden");
+  });
+
+  // Send message function
+  function sendMessage() {
+    if (userInput.value.trim() !== "") {
+      const userMsg = document.createElement("p");
+      userMsg.innerHTML = "<b>You:</b> " + userInput.value;
+      messages.appendChild(userMsg);
+
+      const botMsg = document.createElement("p");
+      botMsg.innerHTML = "<b>Bot:</b> I'm here to help with your health questions!";
+      messages.appendChild(botMsg);
+
+      userInput.value = "";
+      messages.scrollTop = messages.scrollHeight; // auto scroll
+    }
+  }
+
+  sendBtn.addEventListener("click", sendMessage);
+  userInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  // Season Data
+  const seasonData = {
+    rainy: [
+      {title: "🛡️ Immunity Boosting", desc: "Consume vitamin C rich foods, drink herbal teas, eat honey and ginger"},
+      {title: "🧼 Hygiene Maintenance", desc: "Keep feet dry, wear cotton clothes, maintain personal hygiene"},
+      {title: "🦠 Disease Prevention", desc: "Avoid street food, boil water before drinking, use mosquito repellents"}
+    ],
+    summer: [
+      {title: "💧 Stay Hydrated", desc: "Drink 3-4L water daily, include coconut water and buttermilk"},
+      {title: "☀️ Skin Protection", desc: "Use sunscreen, wear light cotton clothes, avoid direct sunlight"},
+      {title: "🥤 Diet Care", desc: "Eat seasonal fruits like watermelon, cucumber, and mangoes"}
+    ],
+    winter: [
+      {title: "🍯 Immunity Boosting", desc: "Consume dry fruits, nuts, and herbal teas"},
+      {title: "🧴 Skin Care", desc: "Moisturize daily, avoid hot water baths, use natural oils"},
+      {title: "🍲 Warm Diet", desc: "Eat soups, leafy greens, and warm whole grains"}
+    ]
+  };
+
+  function updateSeason() {
+    const season = document.getElementById("seasonSelect").value;
+    const content = document.getElementById("seasonContent");
+    content.innerHTML = "";
+    seasonData[season].forEach(item => {
+      content.innerHTML += `
+        <div class="p-4 season-card rounded-xl shadow transition-all duration-300">
+          <h4 class="font-bold text-lg text-emerald-800 mb-2">${item.title}</h4>
+          <p class="text-emerald-600">${item.desc}</p>
+        </div>
+      `;
+    });
+  }
+
+  // Planner Data
+  const plannerData = {
+    "1-30": {
+      movement: [
+        { days: "Days 1-5", text: "20 min brisk walking + basic stretching" },
+        { days: "Days 6-15", text: "30 min jogging + yoga poses" },
+        { days: "Days 16-25", text: "45 min mixed cardio + strength training" },
+        { days: "Days 26-30", text: "1 hour full workout routine + sports" }
+      ],
+      nutrition: [
+        { week: "Week 1", text: "Replace soda with water, add 1 fruit daily" },
+        { week: "Week 2", text: "Include vegetables in every meal, 2L water" },
+        { week: "Week 3", text: "Reduce processed food by 50%, 2.5L water" },
+        { week: "Week 4", text: "Balanced meals with protein, 3L water target" }
+      ]
+    },
+
+    "30-60": {
+      movement: [
+        { days: "Days 1-5", text: "15 min walking + light yoga" },
+        { days: "Days 6-15", text: "20 min brisk walk + stretching" },
+        { days: "Days 16-25", text: "30 min yoga + resistance bands" },
+        { days: "Days 26-30", text: "45 min yoga/pilates + light weights" }
+      ],
+      nutrition: [
+        { week: "Week 1", text: "Low sugar diet + 2L water" },
+        { week: "Week 2", text: "High-fiber meals, fruits daily" },
+        { week: "Week 3", text: "Cut fried food, focus on salads" },
+        { week: "Week 4", text: "Balanced protein & whole grains" }
+      ]
+    },
+
+    "60-100": {
+      movement: [
+        { days: "Days 1-5", text: "10 min slow walk + light stretching" },
+        { days: "Days 6-15", text: "15 min gentle yoga + breathing exercises" },
+        { days: "Days 16-25", text: "20 min walk + chair yoga" },
+        { days: "Days 26-30", text: "20-30 min light exercise + meditation" }
+      ],
+      nutrition: [
+        { week: "Week 1", text: "Soft, easy-to-digest foods + hydration" },
+        { week: "Week 2", text: "Soups, khichdi, light fruits" },
+        { week: "Week 3", text: "High-calcium diet (milk, paneer)" },
+        { week: "Week 4", text: "Balanced meals with protein & greens" }
+      ]
+    }
+  };
+
+  function updatePlanner() {
+    const ageValue = document.getElementById("ageSelect").value;  
+    const movementDiv = document.getElementById("movementContent");
+    const nutritionDiv = document.getElementById("nutritionContent");
+
+    // Clear old content
+    movementDiv.innerHTML = "";
+    nutritionDiv.innerHTML = "";
+
+    // Load data
+    const plan = plannerData[ageValue];
+
+    // Fill movement
+    plan.movement.forEach(item => {
+      movementDiv.innerHTML += `
+        <div class="p-3 planner-card shadow rounded-lg transition-all duration-300">
+          <p class="font-bold text-emerald-800">${item.days}</p>
+          <p class="text-sm text-emerald-600">${item.text}</p>
+        </div>`;
+    });
+
+    // Fill nutrition
+    plan.nutrition.forEach(item => {
+      nutritionDiv.innerHTML += `
+        <div class="p-3 planner-card shadow rounded-lg transition-all duration-300">
+          <p class="font-bold text-emerald-800">${item.week}</p>
+          <p class="text-sm text-emerald-600">${item.text}</p>
+        </div>`;
+    });
+  }
+
+   // Toggle navbar links on mobile
+  const menuBtn = document.getElementById("menuBtn");
+  const navLinks = document.getElementById("navLinks");
+
+  menuBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("hidden");
+  });
+</script>
+</body>
+</html>
